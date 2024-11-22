@@ -26,7 +26,6 @@ FORMAT_FLAGS = -i --verbose
 # Linter
 LINTER = clang-tidy
 LINTER_FLAGS = -check=bugprone-*,cert-*,clang-analyzer-*,concurrency-*,performance-*,portability-*,readability-*,-clang-analyzer-security.insecureAPI.*
-LINTTER_DB = compile_commands.json
 
 # Files
 SRCS := $(shell find $(SRC_DIR) -name '*.c')
@@ -76,7 +75,7 @@ format:
 		done; \
 		echo "$(BOLD)$(GREEN)✓ Codebase formatting completed.$(RESET)"; \
 	else \
-		echo "$(BOLD)$(RED)⨯ Warning: $(FORMATTER) not found. Skipping format.$(RESET)"; \
+		echo "$(BOLD)$(YELLOW)⨯ Warning: $(FORMATTER) not found. Please install $(FORMATTER). Skipping format.$(RESET)"; \
 	fi
 
 # COMMAND: Lint the codebase
@@ -89,8 +88,7 @@ lint:
 		done; \
 		echo "$(BOLD)$(GREEN)✓ Linting completed.$(RESET)"; \
 	else \
-		echo "$(BOLD)$(RED)⨯ Error: $(LINTER) not found. Please install clang-tidy.$(RESET)"; \
-		exit 1; \
+		echo "$(BOLD)$(YELLOW)⨯ Warning: $(LINTER) not found. Please install $(LINTER). Skipping lint.$(RESET)"; \
 	fi
 
 # COMMAND: Remove the build artifacts
