@@ -13,6 +13,7 @@ Diophantine is a self-hosted programming language specifically designed for mach
 - GCC compiler
 - Make build system
 - clang-format (optional, for code formatting)
+- clang-tidy (optional, for code linting)
 
 ### Build Commands
 
@@ -22,6 +23,7 @@ The project uses Make for building and development tasks. The following commands
 - `make run` - Runs the compiled compiler
 - `make all` - Builds and runs the compiler in sequence
 - `make format` - Formats the source code using clang-format
+- `make lint` - Lints the source code using clang-tidy
 - `make clean` - Removes all build artifacts
 - `make help` - Displays available make commands and their descriptions
 

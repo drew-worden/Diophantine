@@ -1,8 +1,8 @@
 #include "cli.h"
 #include <stdio.h>
 
-void print_usage() {
-  printf("Usage: dio [options] input_file\n");
+void print_usage(void) {
+  printf("Usage: diophantine [options] input_file\n");
   printf("Options:\n");
   printf(" -o <file>	Specify output file\n");
   printf(" -O <level>	Optimization level (0-3)\n");

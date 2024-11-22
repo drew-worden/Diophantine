@@ -1,7 +1,7 @@
 #include "cli.h"
 #include <stdio.h>
 
-int main() {
+int main(void) {
   print_usage();
   return 0;
 }

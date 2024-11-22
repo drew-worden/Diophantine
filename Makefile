@@ -18,15 +18,22 @@ INCLUDE_DIR = include
 INCLUDES = -I$(INCLUDE_DIR)
 SRC_DIR = src
 BUILD_DIR = build
+
+# Formatter
 FORMATTER = clang-format
 FORMAT_FLAGS = -i --verbose
+
+# Linter
+LINTER = clang-tidy
+LINTER_FLAGS = -check=bugprone-*,cert-*,clang-analyzer-*,concurrency-*,performance-*,portability-*,readability-*,-clang-analyzer-security.insecureAPI.*
+LINTTER_DB = compile_commands.json
 
 # Files
 SRCS := $(shell find $(SRC_DIR) -name '*.c')
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 # Executable
-EXECUTABLE = $(BUILD_DIR)/dio
+EXECUTABLE = $(BUILD_DIR)/diophantine
 
 # Default target
 .DEFAULT_GOAL := build
@@ -58,7 +65,7 @@ $(BUILD_DIR)/$(basename $(notdir $(1))).o: $(1)
 endef
 $(foreach src,$(SRCS),$(eval $(call compile_rule,$(src))))
 
-# COMMAND: Format the codebase (only if clang-format is available)
+# COMMAND: Format the codebase
 format:
 	@if command -v $(FORMATTER) >/dev/null 2>&1; then \
 		echo "$(BOLD)$(MAGENTA)Formatting codebase...$(RESET)"; \
@@ -70,6 +77,20 @@ format:
 		echo "$(BOLD)$(GREEN)✓ Codebase formatting completed.$(RESET)"; \
 	else \
 		echo "$(BOLD)$(RED)⨯ Warning: $(FORMATTER) not found. Skipping format.$(RESET)"; \
+	fi
+
+# COMMAND: Lint the codebase
+lint:
+	@if command -v $(LINTER) >/dev/null 2>&1; then \
+		echo "$(BOLD)$(MAGENTA)Running linter...$(RESET)"; \
+		for src in $(SRCS); do \
+			echo "$(CYAN)⟳ Analyzing $$(basename $$src)...$(RESET)"; \
+			$(LINTER) $(LINT_FLAGS) $$src -- $(COMPILER_FLAGS) $(INCLUDES) || exit 1; \
+		done; \
+		echo "$(BOLD)$(GREEN)✓ Linting completed.$(RESET)"; \
+	else \
+		echo "$(BOLD)$(RED)⨯ Error: $(LINTER) not found. Please install clang-tidy.$(RESET)"; \
+		exit 1; \
 	fi
 
 # COMMAND: Remove the build artifacts
